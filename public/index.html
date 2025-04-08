@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Declutter Guide</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">AI Declutter Guide</div>
+        <ul class="nav-links">
+            <li><a href="#home" class="active">Home</a></li>
+            <li><a href="#guide">Decluttering Guide</a></li>
+            <li><a href="#assistant">AI Assistant</a></li>
+            <li><a href="#tips">Tips & Challenges</a></li>
+        </ul>
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+            <i class="fas fa-moon"></i>
+        </button>
+    </nav>
+
+    <main>
+        <section id="home" class="hero-section">
+            <h1>Transform Your Space with AI-Powered Decluttering</h1>
+            <p>Get personalized decluttering recommendations and transform your space into a minimalist haven.</p>
+            <button class="cta-button" onclick="scrollToAssistant()">Start Your Decluttering Journey</button>
+        </section>
+
+        <section id="assistant" class="ai-assistant-section">
+            <h2>AI Decluttering Assistant</h2>
+            <div class="input-container">
+                <div class="text-input">
+                    <textarea id="textInput" placeholder="Describe your clutter situation..."></textarea>
+                    <div class="button-container">
+                        <button onclick="submitTextInput()">Get Suggestions</button>
+                    </div>
+                </div>
+                <div class="image-input">
+                    <div class="file-upload-container">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Drag & drop an image here or click to browse</p>
+                        <p>Supported formats: JPG, PNG, WEBP</p>
+                        <input type="file" id="imageInput" accept="image/*" onchange="updateFileName(this)">
+                    </div>
+                    <div class="file-name-display" id="fileNameDisplay"></div>
+                    <div class="button-container">
+                        <button onclick="submitImageInput()">Analyze Space</button>
+                    </div>
+                </div>
+            </div>
+            <div id="aiResponse" class="ai-response">
+                <!-- AI responses will be displayed here -->
+            </div>
+        </section>
+
+        <section id="guide" class="guide-section">
+            <h2>Quick Tips & Plans</h2>
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <i class="fas fa-home"></i>
+                    <h3>Home Organization</h3>
+                    <p>Tips for organizing your living spaces</p>
+                </div>
+                <div class="tip-card">
+                    <i class="fas fa-laptop"></i>
+                    <h3>Digital Decluttering</h3>
+                    <p>Organize your digital life</p>
+                </div>
+                <div class="tip-card">
+                    <i class="fas fa-brain"></i>
+                    <h3>Mental Decluttering</h3>
+                    <p>Clear your mind and focus</p>
+                </div>
+                <div class="tip-card">
+                    <i class="fas fa-leaf"></i>
+                    <h3>Minimalist Lifestyle</h3>
+                    <p>Embrace minimalism</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="tips" class="challenge-section">
+            <h2>7-Day Minimalist Challenge</h2>
+            <div class="challenge-container">
+                <button class="challenge-button" onclick="startChallenge()">Start Challenge</button>
+                <div id="challengeProgress" class="challenge-progress">
+                    <!-- Challenge progress will be displayed here -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 AI Declutter Guide. All rights reserved.</p>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
