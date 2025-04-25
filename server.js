@@ -42,17 +42,55 @@ function parseGeminiResponse(response) {
 app.post('/api/analyze-text', async (req, res) => {
     try {
         const { text } = req.body;
-        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
-        const prompt = `As a decluttering expert, provide specific, actionable suggestions for the following situation: ${text}
-        Please provide 5-7 practical steps that are easy to follow. Focus on minimalist principles and sustainable organization.
-        Format each suggestion as a clear, concise statement without numbering or bullet points.`;
+        // Define decluttering keywords (you can adjust this list)
+        const declutteringKeywords = ["clutter", "organize", "minimalist", "storage", "sort", "donate", "reduce", "space", "tidy", "dispose", "clear out", "streamline", "arrange", "downsize"];
 
-        const result = await model.generateContent(prompt);
-        const response = await result.response;
-        const suggestions = parseGeminiResponse(response);
+        // Function to check if the input is related to decluttering
+        function isDeclutteringRelated(inputText) {
+            if (!inputText) return false;
+            const lowerCaseText = inputText.toLowerCase();
+            const greetingKeywords = ["hi", "hello", "how are you", "what's up", "good morning", "good afternoon", "good evening", "hey","age","ipl"];
+            const textWords = lowerCaseText.split(/\s+/); // Split into words
+        
+            // Check if the input is primarily a greeting
+            const isGreeting = textWords.every(word => greetingKeywords.includes(word));
+        
+            if (isGreeting && textWords.length <= 5) { // Adjust length as needed
+                return false; // Treat simple greetings as out-of-domain
+            }
+        
+            // Check for the presence of decluttering keywords
+            for (const keyword of declutteringKeywords) {
+                if (lowerCaseText.includes(keyword)) {
+                    return true;
+                }
+            }
+            return false;
+        }
 
-        res.json({ suggestions });
+        if (isDeclutteringRelated(text)) {
+            // Process as a decluttering query
+            const model = genAI.getGenerativeModel({
+                model: "gemini-2.0-flash",
+                generationConfig: {
+                    temperature: 0.7
+                }
+            });
+
+            const prompt = `As a decluttering expert, provide specific, actionable suggestions for the following situation: ${text}
+            Please provide 5-7 practical steps that are easy to follow. Focus on minimalist principles and sustainable organization.
+            Format each suggestion as a clear, concise statement without numbering or bullet points.`;
+
+            const result = await model.generateContent(prompt);
+            const response = await result.response;
+            const suggestions = parseGeminiResponse(response);
+
+            res.json({ suggestions });
+        } else {
+            // Respond to out-of-domain query
+            res.json({ suggestions: ["Sorry, I cannot help with questions outside of decluttering."] });
+        }
     } catch (error) {
         console.error('Error analyzing text:', error);
         res.status(500).json({ error: 'Error generating suggestions' });
@@ -70,7 +108,13 @@ app.post('/api/analyze-image', upload.single('image'), async (req, res) => {
             return res.status(400).json({ error: 'File must be an image' });
         }
 
-        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+        const model = genAI.getGenerativeModel({ 
+            model: "gemini-2.0-flash",
+            generationConfig: {
+                temperature: 0.7
+            }
+        });
+        
 
         const prompt = `You are an expert decluttering consultant. Analyze this image of a cluttered space and provide a detailed decluttering plan.
         Consider the following aspects:
